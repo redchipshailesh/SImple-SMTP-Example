@@ -1,0 +1,45 @@
+<?php               
+require_once('class.phpmailer.php');
+if(isset($_POST['Submit'])) {
+$fname = $_POST['fname'];
+$maileremail = $_POST['maileremail'];
+$subject = $_POST['subject']; 
+$message = $_POST['message']; 
+
+$mail = new PHPMailer();
+
+$text = 'The person that contacted you is  '.$fname.'  E-mail: '.$maileremail.' Subject: '.$subject.' Message: '.$message.' :';
+$body = eregi_replace("[\]",'',$text);
+
+$text2 = 'The person that contacted you is  '.$fname.'  E-mail: REMOVED - To get email address you must login Subject: '.$subject.' Message: '.$message.' :';
+$body2 = eregi_replace("[\]",'',$text2);
+
+$mail->IsSMTP(); // telling the class to use SMTP
+$mail->Host = "xxxxx.xxxxx.xxx"; // SMTP server
+$mail->SMTPAuth = true;                  // enable SMTP authentication
+$mail->SMTPKeepAlive = true;                  // SMTP connection will not close after each email sent
+$mail->Host = "xxxxx.xxxxx.xxx"; // sets the SMTP server
+$mail->Port = XXXXXXXX;                    // set the SMTP port for the GMAIL server
+$mail->Username = "xxxxx@xxxxx.xxx"; // SMTP account username
+$mail->Password = "XXXXXXXX";        // SMTP account password
+$mail->SetFrom('xxxxx@xxxxx.xxx', 'XXXXXXXX');
+$mail->Subject = $subject;
+
+$add = array("first@email.xxx", "second@email.xxx");
+
+foreach($add as $address) { 
+    if($address == "first@email.xxx") {
+        $mail->AddAddress($address, "xxxxxxxxx"); 
+        $mail->Body = $body;
+    }
+    elseif($address == "second@email.xxx") {
+        $mail->AddAddress($address, "xxxxxxxxx"); 
+        $mail->Body = $body2;
+    }                       
+}
+
+if(!$mail->Send()) {
+     echo "Mailer Error: " . $mail->ErrorInfo;
+} else {
+     echo "<h3><b>Message sent!</b></h3>";
+}}?>
